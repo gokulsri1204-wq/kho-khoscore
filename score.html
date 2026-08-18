@@ -1,0 +1,1483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Kho-Kho Scoreboard</title>
+
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    --primary: #087fc1;
+    --primary-dark: #075d91;
+    --green: #0aa58f;
+    --blue: #2860df;
+    --red: #ef3838;
+    --orange: #f66a0a;
+    --yellow: #f2b900;
+    --purple: #5045e8;
+    --gray: #65758b;
+    --bg: #edf3f9;
+    --card: #ffffff;
+    --text: #111827;
+}
+
+body.dark {
+    --bg: #111827;
+    --card: #1f2937;
+    --text: #f9fafb;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    transition: .3s;
+}
+
+button,
+input {
+    font-family: inherit;
+}
+
+button {
+    border: 0;
+    cursor: pointer;
+    font-weight: 700;
+}
+
+/* HEADER */
+
+.header {
+    width: min(100%, 900px);
+    margin: auto;
+    padding: 18px 20px 8px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.logo {
+    color: var(--primary);
+    font-size: 22px;
+    font-weight: 900;
+    letter-spacing: 1px;
+}
+
+.theme-btn {
+    width: 42px;
+    height: 42px;
+    background: white;
+    border-radius: 50%;
+    box-shadow: 0 3px 12px #0002;
+    font-size: 21px;
+}
+
+/* APP */
+
+.app {
+    width: min(100%, 900px);
+    margin: auto;
+    padding: 10px 20px 30px;
+}
+
+/* SETUP */
+
+.setup {
+    background: var(--card);
+    max-width: 500px;
+    margin: 20px auto;
+    padding: 26px;
+    border-radius: 24px;
+    box-shadow: 0 15px 40px #0002;
+}
+
+.setup h2 {
+    margin-bottom: 20px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    font-weight: 700;
+    margin-bottom: 7px;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 14px;
+    border: 1px solid #d7dee7;
+    border-radius: 10px;
+    font-size: 16px;
+    background: #f7f9fb;
+}
+
+.start-btn {
+    width: 100%;
+    background: var(--green);
+    color: white;
+    padding: 15px;
+    border-radius: 11px;
+    font-size: 16px;
+    margin-top: 8px;
+}
+
+/* SCORE CARD */
+
+.score-card {
+    background: var(--card);
+    border-radius: 24px;
+    padding: 24px;
+    box-shadow: 0 15px 35px #0002;
+    text-align: center;
+    margin-bottom: 14px;
+}
+
+.match-status {
+    display: inline-block;
+    background: var(--primary);
+    color: white;
+    border-radius: 30px;
+    padding: 7px 18px;
+    font-size: 13px;
+    font-weight: 800;
+    margin-bottom: 12px;
+}
+
+.team-scores {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+.team {
+    padding: 10px;
+}
+
+.team-name {
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--primary);
+}
+
+.score {
+    font-size: 64px;
+    line-height: 1;
+    font-weight: 900;
+    margin: 8px 0;
+}
+
+.score-label {
+    color: #65758b;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+/* TURN */
+
+.turn-info {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 16px;
+    flex-wrap: wrap;
+}
+
+.info-pill {
+    background: #eef4fa;
+    color: #42526a;
+    padding: 8px 13px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+body.dark .info-pill {
+    background: #374151;
+    color: #e5e7eb;
+}
+
+/* TIMER */
+
+.timer {
+    margin-top: 15px;
+    font-size: 31px;
+    font-weight: 900;
+    color: var(--red);
+}
+
+/* KEYPAD */
+
+.keypad-card {
+    background: var(--card);
+    padding: 13px;
+    border-radius: 20px;
+    box-shadow: 0 7px 20px #0001;
+}
+
+.section-title {
+    text-align: center;
+    color: #3e5975;
+    font-size: 12px;
+    font-weight: 900;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+}
+
+body.dark .section-title {
+    color: #d1d5db;
+}
+
+.player-input {
+    width: 100%;
+    padding: 13px;
+    border: 1px solid #d6dde6;
+    border-radius: 10px;
+    margin-bottom: 9px;
+    font-size: 16px;
+    text-align: center;
+}
+
+.keypad {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+}
+
+.key {
+    height: 58px;
+    border-radius: 12px;
+    color: white;
+    font-size: 18px;
+    box-shadow: 0 3px 5px #0002;
+    transition: transform .1s;
+}
+
+.key:active {
+    transform: scale(.96);
+}
+
+.key.safe {
+    background: white;
+    color: #435b75;
+    border: 1px solid #ddd;
+}
+
+.key.one,
+.key.two {
+    background: var(--blue);
+}
+
+.key.three {
+    background: #09aac4;
+}
+
+.key.four {
+    background: #2561dc;
+}
+
+.key.out {
+    background: var(--red);
+}
+
+.key.six {
+    background: var(--orange);
+}
+
+.key.five {
+    background: #08b47c;
+}
+
+/* ACTION BUTTONS */
+
+.undo {
+    width: 100%;
+    margin-top: 8px;
+    background: var(--yellow);
+    color: #171717;
+    padding: 13px;
+    border-radius: 11px;
+    font-size: 14px;
+}
+
+.bottom-buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 12px;
+}
+
+.bottom-buttons button {
+    padding: 13px;
+    border-radius: 11px;
+    color: white;
+}
+
+.scoreboard-btn {
+    background: var(--purple);
+}
+
+.reset-btn {
+    background: var(--gray);
+}
+
+/* HISTORY */
+
+.history {
+    margin-top: 15px;
+    background: var(--card);
+    border-radius: 20px;
+    padding: 18px;
+    box-shadow: 0 5px 20px #0001;
+}
+
+.history h3 {
+    margin-bottom: 10px;
+}
+
+.history-list {
+    max-height: 220px;
+    overflow-y: auto;
+}
+
+.history-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    border-bottom: 1px solid #e4e8ee;
+    font-size: 14px;
+}
+
+/* MODAL */
+
+.modal {
+    position: fixed;
+    inset: 0;
+    background: #0009;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    z-index: 100;
+}
+
+.modal.show {
+    display: flex;
+}
+
+.modal-box {
+    width: min(100%, 500px);
+    background: var(--card);
+    border-radius: 22px;
+    padding: 25px;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.modal-box h2 {
+    margin-bottom: 18px;
+}
+
+.close-btn {
+    width: 100%;
+    background: var(--gray);
+    color: white;
+    padding: 13px;
+    border-radius: 10px;
+    margin-top: 15px;
+}
+
+/* WINNER */
+
+.winner {
+    position: fixed;
+    inset: 0;
+    background: #0009;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 200;
+}
+
+.winner.show {
+    display: flex;
+}
+
+.winner-box {
+    background: linear-gradient(135deg, #ff7a00, #ffb300);
+    color: white;
+    text-align: center;
+    padding: 45px 30px;
+    border-radius: 28px;
+    width: min(90%, 480px);
+    box-shadow: 0 20px 60px #0007;
+    border: 5px solid white;
+}
+
+.winner-box h1 {
+    font-size: 50px;
+    margin-bottom: 10px;
+}
+
+.winner-box p {
+    font-size: 18px;
+    font-weight: 900;
+    letter-spacing: 2px;
+}
+
+.winner-box button {
+    background: white;
+    color: #e85c00;
+    padding: 13px 25px;
+    border-radius: 10px;
+    margin-top: 22px;
+}
+
+/* MOBILE */
+
+@media(max-width:600px) {
+
+    .header {
+        padding: 15px;
+    }
+
+    .app {
+        padding: 5px 12px 25px;
+    }
+
+    .logo {
+        font-size: 17px;
+    }
+
+    .score {
+        font-size: 52px;
+    }
+
+    .team-name {
+        font-size: 15px;
+    }
+
+    .setup {
+        margin-top: 10px;
+    }
+
+    .key {
+        height: 54px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header class="header">
+    <div class="logo">NAC KHO-KHO SCORE</div>
+
+    <button class="theme-btn" onclick="toggleTheme()">
+        ☀️
+    </button>
+</header>
+
+<main class="app">
+
+    <!-- SETUP -->
+
+    <section id="setup" class="setup">
+
+        <h2>Start Match Setup</h2>
+
+        <div class="form-group">
+            <label>Team A</label>
+            <input id="teamAInput" placeholder="e.g. Ramnad">
+        </div>
+
+        <div class="form-group">
+            <label>Team B</label>
+            <input id="teamBInput" placeholder="e.g. Chennai">
+        </div>
+
+        <div class="form-group">
+            <label>Number of Turns</label>
+            <input id="turnsInput"
+                   type="number"
+                   min="1"
+                   value="4"
+                   placeholder="e.g. 4">
+        </div>
+
+        <button class="start-btn" onclick="startMatch()">
+            Start Match
+        </button>
+
+    </section>
+
+
+    <!-- GAME -->
+
+    <section id="game" style="display:none">
+
+        <!-- SCORE -->
+
+        <div class="score-card">
+
+            <div class="match-status" id="turnLabel">
+                TURN 1
+            </div>
+
+            <div class="team-scores">
+
+                <div class="team">
+                    <div class="team-name" id="teamAName">
+                        TEAM A
+                    </div>
+
+                    <div class="score" id="scoreA">
+                        0
+                    </div>
+
+                    <div class="score-label">
+                        POINTS
+                    </div>
+                </div>
+
+                <div class="team">
+                    <div class="team-name" id="teamBName">
+                        TEAM B
+                    </div>
+
+                    <div class="score" id="scoreB">
+                        0
+                    </div>
+
+                    <div class="score-label">
+                        POINTS
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="turn-info">
+
+                <div class="info-pill" id="chaseLabel">
+                    TEAM A CHASING
+                </div>
+
+                <div class="info-pill">
+                    TURN SCORE:
+                    <span id="turnScore">0</span>
+                </div>
+
+            </div>
+
+            <div class="timer" id="timer">
+                00:00
+            </div>
+
+        </div>
+
+
+        <!-- KEYPAD -->
+
+        <div class="keypad-card">
+
+            <div class="section-title">
+                MATCH KEYPAD
+            </div>
+
+            <input
+                id="playerNumber"
+                class="player-input"
+                type="number"
+                min="1"
+                max="99"
+                placeholder="Defender / Player Number"
+            >
+
+            <div class="keypad">
+
+                <button class="key safe"
+                        onclick="safeAction()">
+                    SAFE
+                </button>
+
+                <button class="key one"
+                        onclick="scorePoint(1)">
+                    +1
+                </button>
+
+                <button class="key two"
+                        onclick="scorePoint(2)">
+                    +2
+                </button>
+
+                <button class="key three"
+                        onclick="scorePoint(3)">
+                    +3
+                </button>
+
+                <button class="key four"
+                        onclick="scorePoint(4)">
+                    +4
+                </button>
+
+                <button class="key out"
+                        onclick="outPlayer()">
+                    OUT
+                </button>
+
+                <button class="key five"
+                        onclick="scorePoint(5)">
+                    +5
+                </button>
+
+                <button class="key six"
+                        onclick="scorePoint(6)">
+                    +6
+                </button>
+
+                <button class="key safe"
+                        onclick="penalty()">
+                    PENALTY
+                </button>
+
+            </div>
+
+            <button class="undo"
+                    onclick="undoAction()">
+                ↶ Undo Last Action
+            </button>
+
+        </div>
+
+
+        <!-- BOTTOM -->
+
+        <div class="bottom-buttons">
+
+            <button class="scoreboard-btn"
+                    onclick="showScoreboard()">
+                Scoreboard
+            </button>
+
+            <button class="reset-btn"
+                    onclick="resetMatch()">
+                Reset Match
+            </button>
+
+        </div>
+
+
+        <!-- HISTORY -->
+
+        <div class="history">
+
+            <h3>Match Events</h3>
+
+            <div id="historyList"
+                 class="history-list">
+            </div>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<!-- SCOREBOARD MODAL -->
+
+<div id="scoreModal" class="modal">
+
+    <div class="modal-box">
+
+        <h2>Match Scoreboard</h2>
+
+        <div id="scoreboardContent"></div>
+
+        <button class="close-btn"
+                onclick="closeScoreboard()">
+            Close
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- WINNER -->
+
+<div id="winnerModal" class="winner">
+
+    <div class="winner-box">
+
+        <h1>🏆 WINNER!</h1>
+
+        <p id="winnerText"></p>
+
+        <button onclick="closeWinner()">
+            Continue
+        </button>
+
+    </div>
+
+</div>
+
+
+<script>
+
+/* =========================
+   GAME STATE
+========================= */
+
+let game = {
+
+    teamA: "",
+    teamB: "",
+
+    scoreA: 0,
+    scoreB: 0,
+
+    turn: 1,
+    totalTurns: 4,
+
+    chasing: "A",
+
+    turnScore: 0,
+
+    timerSeconds: 0,
+
+    timerRunning: false,
+
+    history: [],
+
+    actions: []
+
+};
+
+
+/* =========================
+   START MATCH
+========================= */
+
+function startMatch() {
+
+    const teamA =
+        document.getElementById("teamAInput").value.trim()
+        || "TEAM A";
+
+    const teamB =
+        document.getElementById("teamBInput").value.trim()
+        || "TEAM B";
+
+    const turns =
+        parseInt(document.getElementById("turnsInput").value)
+        || 4;
+
+
+    game = {
+
+        teamA: teamA,
+        teamB: teamB,
+
+        scoreA: 0,
+        scoreB: 0,
+
+        turn: 1,
+        totalTurns: turns,
+
+        chasing: "A",
+
+        turnScore: 0,
+
+        timerSeconds: 0,
+
+        timerRunning: true,
+
+        history: [],
+        actions: []
+
+    };
+
+
+    document.getElementById("setup").style.display = "none";
+
+    document.getElementById("game").style.display = "block";
+
+
+    updateScreen();
+
+    startTimer();
+
+    saveGame();
+
+}
+
+
+/* =========================
+   SCREEN
+========================= */
+
+function updateScreen() {
+
+    document.getElementById("teamAName").textContent =
+        game.teamA;
+
+    document.getElementById("teamBName").textContent =
+        game.teamB;
+
+    document.getElementById("scoreA").textContent =
+        game.scoreA;
+
+    document.getElementById("scoreB").textContent =
+        game.scoreB;
+
+    document.getElementById("turnLabel").textContent =
+        "TURN " + game.turn + " / " + game.totalTurns;
+
+    document.getElementById("chaseLabel").textContent =
+        game.chasing === "A"
+        ? game.teamA + " CHASING"
+        : game.teamB + " CHASING";
+
+    document.getElementById("turnScore").textContent =
+        game.turnScore;
+
+    updateHistory();
+
+}
+
+
+/* =========================
+   SCORE POINT
+========================= */
+
+function scorePoint(points) {
+
+    saveAction();
+
+    if (game.chasing === "A") {
+
+        game.scoreA += points;
+
+    } else {
+
+        game.scoreB += points;
+
+    }
+
+    game.turnScore += points;
+
+
+    addHistory(
+        `${getChasingTeam()} scored ${points} point${points > 1 ? "s" : ""}`
+    );
+
+
+    updateScreen();
+
+    saveGame();
+
+}
+
+
+/* =========================
+   OUT
+========================= */
+
+function outPlayer() {
+
+    const player =
+        document.getElementById("playerNumber").value;
+
+    saveAction();
+
+
+    /*
+       In normal Kho-Kho scoring,
+       an out gives the chasing team a point.
+    */
+
+    if (game.chasing === "A") {
+
+        game.scoreA++;
+
+    } else {
+
+        game.scoreB++;
+
+    }
+
+
+    game.turnScore++;
+
+
+    addHistory(
+        `${getChasingTeam()} OUT - Player #${player || "?"} (+1)`
+    );
+
+
+    document.getElementById("playerNumber").value = "";
+
+
+    updateScreen();
+
+    saveGame();
+
+}
+
+
+/* =========================
+   SAFE
+========================= */
+
+function safeAction() {
+
+    saveAction();
+
+    const player =
+        document.getElementById("playerNumber").value
+        || "?";
+
+    addHistory(
+        `Player #${player} SAFE`
+    );
+
+    document.getElementById("playerNumber").value = "";
+
+    updateScreen();
+
+    saveGame();
+
+}
+
+
+/* =========================
+   PENALTY
+========================= */
+
+function penalty() {
+
+    saveAction();
+
+    addHistory(
+        `${getChasingTeam()} penalty recorded`
+    );
+
+    updateScreen();
+
+    saveGame();
+
+}
+
+
+/* =========================
+   UNDO
+========================= */
+
+function saveAction() {
+
+    game.actions.push(
+        JSON.stringify({
+            scoreA: game.scoreA,
+            scoreB: game.scoreB,
+            turnScore: game.turnScore,
+            history: game.history
+        })
+    );
+
+}
+
+
+function undoAction() {
+
+    if (game.actions.length === 0) {
+
+        alert("Nothing to undo.");
+
+        return;
+
+    }
+
+
+    const previous =
+        JSON.parse(game.actions.pop());
+
+
+    game.scoreA =
+        previous.scoreA;
+
+    game.scoreB =
+        previous.scoreB;
+
+    game.turnScore =
+        previous.turnScore;
+
+    game.history =
+        previous.history;
+
+
+    updateScreen();
+
+    saveGame();
+
+}
+
+
+/* =========================
+   HISTORY
+========================= */
+
+function addHistory(text) {
+
+    const now =
+        new Date().toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit"
+        });
+
+
+    game.history.unshift({
+        text: text,
+        time: now
+    });
+
+}
+
+
+function updateHistory() {
+
+    const list =
+        document.getElementById("historyList");
+
+
+    if (game.history.length === 0) {
+
+        list.innerHTML =
+            "<p>No events yet.</p>";
+
+        return;
+
+    }
+
+
+    list.innerHTML =
+        game.history.map(item => {
+
+            return `
+                <div class="history-item">
+                    <span>${escapeHTML(item.text)}</span>
+                    <small>${item.time}</small>
+                </div>
+            `;
+
+        }).join("");
+
+}
+
+
+/* =========================
+   TEAM
+========================= */
+
+function getChasingTeam() {
+
+    return game.chasing === "A"
+        ? game.teamA
+        : game.teamB;
+
+}
+
+
+/* =========================
+   TIMER
+========================= */
+
+let timerInterval = null;
+
+
+function startTimer() {
+
+    clearInterval(timerInterval);
+
+
+    timerInterval =
+        setInterval(() => {
+
+            if (!game.timerRunning) return;
+
+
+            game.timerSeconds++;
+
+            updateTimer();
+
+        }, 1000);
+
+}
+
+
+function updateTimer() {
+
+    const minutes =
+        Math.floor(game.timerSeconds / 60)
+        .toString()
+        .padStart(2, "0");
+
+    const seconds =
+        (game.timerSeconds % 60)
+        .toString()
+        .padStart(2, "0");
+
+
+    document.getElementById("timer").textContent =
+        `${minutes}:${seconds}`;
+
+}
+
+
+/* =========================
+   NEXT TURN
+========================= */
+
+function nextTurn() {
+
+    if (game.turn >= game.totalTurns) {
+
+        finishMatch();
+
+        return;
+
+    }
+
+
+    game.turn++;
+
+    game.chasing =
+        game.chasing === "A"
+        ? "B"
+        : "A";
+
+    game.turnScore = 0;
+
+    game.timerSeconds = 0;
+
+    addHistory(
+        `Turn ${game.turn} started - ${getChasingTeam()} chasing`
+    );
+
+    updateScreen();
+
+    saveGame();
+
+}
+
+
+/* =========================
+   FINISH
+========================= */
+
+function finishMatch() {
+
+    game.timerRunning = false;
+
+    clearInterval(timerInterval);
+
+
+    let winner;
+
+
+    if (game.scoreA > game.scoreB) {
+
+        winner = game.teamA;
+
+    } else if (game.scoreB > game.scoreA) {
+
+        winner = game.teamB;
+
+    } else {
+
+        winner = "MATCH DRAW";
+
+    }
+
+
+    document.getElementById("winnerText").textContent =
+        winner === "MATCH DRAW"
+        ? "MATCH DRAW"
+        : winner + " WINS!";
+
+
+    document
+        .getElementById("winnerModal")
+        .classList.add("show");
+
+
+    saveGame();
+
+}
+
+
+/* =========================
+   WINNER
+========================= */
+
+function closeWinner() {
+
+    document
+        .getElementById("winnerModal")
+        .classList.remove("show");
+
+}
+
+
+/* =========================
+   SCOREBOARD
+========================= */
+
+function showScoreboard() {
+
+    const html = `
+
+        <div style="
+            display:grid;
+            grid-template-columns:1fr 1fr;
+            gap:12px;
+            text-align:center;
+        ">
+
+            <div style="
+                background:#eef5ff;
+                padding:20px;
+                border-radius:15px;
+            ">
+
+                <h3>${escapeHTML(game.teamA)}</h3>
+
+                <div style="
+                    font-size:45px;
+                    font-weight:900;
+                    color:#2860df;
+                ">
+                    ${game.scoreA}
+                </div>
+
+                <small>POINTS</small>
+
+            </div>
+
+
+            <div style="
+                background:#effaf7;
+                padding:20px;
+                border-radius:15px;
+            ">
+
+                <h3>${escapeHTML(game.teamB)}</h3>
+
+                <div style="
+                    font-size:45px;
+                    font-weight:900;
+                    color:#0aa58f;
+                ">
+                    ${game.scoreB}
+                </div>
+
+                <small>POINTS</small>
+
+            </div>
+
+        </div>
+
+        <hr style="margin:20px 0">
+
+        <p>
+            <b>Current Turn:</b>
+            ${game.turn} / ${game.totalTurns}
+        </p>
+
+        <p style="margin-top:8px">
+            <b>Chasing:</b>
+            ${escapeHTML(getChasingTeam())}
+        </p>
+
+        <p style="margin-top:8px">
+            <b>Turn Points:</b>
+            ${game.turnScore}
+        </p>
+
+    `;
+
+
+    document.getElementById("scoreboardContent")
+        .innerHTML = html;
+
+
+    document.getElementById("scoreModal")
+        .classList.add("show");
+
+}
+
+
+function closeScoreboard() {
+
+    document.getElementById("scoreModal")
+        .classList.remove("show");
+
+}
+
+
+/* =========================
+   RESET
+========================= */
+
+function resetMatch() {
+
+    if (!confirm("Reset this match?")) {
+
+        return;
+
+    }
+
+
+    clearInterval(timerInterval);
+
+    localStorage.removeItem("khoKhoGame");
+
+
+    document.getElementById("game").style.display =
+        "none";
+
+    document.getElementById("setup").style.display =
+        "block";
+
+}
+
+
+/* =========================
+   DARK MODE
+========================= */
+
+function toggleTheme() {
+
+    document.body.classList.toggle("dark");
+
+    localStorage.setItem(
+        "khoKhoDark",
+        document.body.classList.contains("dark")
+    );
+
+}
+
+
+if (
+    localStorage.getItem("khoKhoDark") === "true"
+) {
+
+    document.body.classList.add("dark");
+
+}
+
+
+/* =========================
+   LOCAL STORAGE
+========================= */
+
+function saveGame() {
+
+    localStorage.setItem(
+        "khoKhoGame",
+        JSON.stringify(game)
+    );
+
+}
+
+
+function loadGame() {
+
+    const saved =
+        localStorage.getItem("khoKhoGame");
+
+
+    if (!saved) return;
+
+
+    try {
+
+        game = JSON.parse(saved);
+
+        document.getElementById("setup")
+            .style.display = "none";
+
+        document.getElementById("game")
+            .style.display = "block";
+
+        updateScreen();
+
+        updateTimer();
+
+        startTimer();
+
+    } catch (error) {
+
+        console.log("Could not load game.");
+
+    }
+
+}
+
+
+/* =========================
+   SECURITY
+========================= */
+
+function escapeHTML(value) {
+
+    return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+
+}
+
+
+/* =========================
+   KEYBOARD SHORTCUTS
+========================= */
+
+document.addEventListener("keydown", function(e) {
+
+    if (e.key === "1") scorePoint(1);
+    if (e.key === "2") scorePoint(2);
+    if (e.key === "3") scorePoint(3);
+    if (e.key === "4") scorePoint(4);
+    if (e.key === "5") scorePoint(5);
+    if (e.key === "6") scorePoint(6);
+
+    if (e.key.toLowerCase() === "o") {
+        outPlayer();
+    }
+
+});
+
+
+/* =========================
+   LOAD
+========================= */
+
+loadGame();
+
+</script>
+
+</body>
+</html>
